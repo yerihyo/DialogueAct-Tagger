@@ -2,23 +2,22 @@
 
 #1) Install python dependencies
 
-pip install nltk
-pip install scikit-learn
-pip install spacy
+ARG0=${BASH_SOURCE[0]}
+FILE_PATH=$(greadlink -f $ARG0)
+FILE_DIR=$(dirname $FILE_PATH)
+
+#pip install nltk
+#pip install scikit-learn
+#pip install spacy
+
+pushd $FILE_DIR
+
+pip install -U -r requirements.txt
+
 python -m spacy download en
 
 #2) Download publicly available corpora
-if [ ! -d "data/Maptask/" ] ; then
-    mkdir data/Maptask
-fi
-
-if [ ! -d "data/AMI/" ] ; then
-    mkdir data/AMI
-fi
-
-if [ ! -d "data/Oasis" ] ; then
-    mkdir data/Oasis
-fi
+mkdir -p data/Maptask data/AMI data/Oasis
 
 if [ ! -d "data/Maptask/maptaskv2-1" ] ; then
 	echo "Downloading the Maptask corpus"
@@ -34,3 +33,5 @@ if [ ! -d "data/Oasis/corpus" ] ; then
 	echo "Downloading the Oasis corpus"
          mkdir corpus && cd corpus && wget http://groups.inf.ed.ac.uk/oasis/download/oasis_full_rel1.0.zip && unzip -q oasis_full_rel1.0.zip && rm -f oasis_full_rel1.0.zip && cd .. && mv corpus data/Oasis/corpus
 fi
+
+popd

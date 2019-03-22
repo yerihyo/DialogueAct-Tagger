@@ -1,6 +1,8 @@
+#!/usr/bin/env python
+
 import sys
 import os
-sys.path.insert(1, os.path.join(sys.path[0], '..'))
+sys.path.insert(1, os.path.dirname(sys.path[0]))
 
 from config import Config, Model
 import argparse
@@ -24,8 +26,10 @@ if __name__ == "__main__":
     parser.add_argument('-s', dest='sentence', type=str, help="the sentence to tag")
     parser.add_argument('-p', dest='prev', type=str, help="[optional] the previous sentence in the dialogue")
 
+    #parser.add_argument('-I', dest='infile', type=str, help="the input filepath")
+
     args = parser.parse_args()
-    if args.model is None or args.sentence is None:
+    if args.model is None: # or args.sentence is None:
         parser.print_help(sys.stderr)
         exit(1)
 
@@ -36,5 +40,12 @@ if __name__ == "__main__":
         tagger = SVMPredictor(cfg)
     else:
         raise NotImplementedError(f"Unknown classifier type: {cfg.model_type}")
+
     logger.info("Tagging utterance")
-    print(tagger.dialogue_act_tag(args.sentence))
+    #print(tagger.dialogue_act_tag(args.sentence))
+    print("input: ", flush=True, end="")
+    for s in sys.stdin:
+        hyp = tagger.dialogue_act_tag(s)
+        print("result: {0}".format(hyp))
+
+        print("input: ", flush=True, end="")

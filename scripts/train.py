@@ -1,6 +1,8 @@
+#!/usr/bin/env python
+
 import sys
 import os
-sys.path.insert(1, os.path.join(sys.path[0], '..'))
+sys.path.insert(1, os.path.dirname(sys.path[0]))
 
 from config import Config
 import argparse
